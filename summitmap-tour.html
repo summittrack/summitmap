@@ -13,10 +13,24 @@
   --bg:#1a1916;--surface:#252420;--surface2:#2e2d28;
   --text:#f5f4f0;--text2:#9e9d96;
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px}
+body{
+  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:10px;-webkit-text-size-adjust:100%;
+}
+
+/* Wrapper reserves the scaled footprint so layout/flexbox see the real visual size */
+.tour-wrap{
+  width:900px;height:506px;position:relative;
+}
 
 /* Tour container */
-.tour{position:relative;width:900px;height:506px;background:var(--surface);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06);display:flex;flex-direction:column;transform-origin:top center}
+.tour{
+  position:relative;width:900px;height:506px;background:var(--surface);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06);
+  display:flex;flex-direction:column;transform-origin:top left;
+}
 
 /* Simulated browser chrome */
 .chrome{height:36px;background:var(--surface2);display:flex;align-items:center;padding:0 14px;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
@@ -213,278 +227,279 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 </head>
 <body>
 
-<div class="tour">
-  <div class="chrome">
-    <div class="chrome-nav">
-      <div class="chrome-nav-btn">‹</div>
-      <div class="chrome-nav-btn">›</div>
+<div class="tour-wrap">
+  <div class="tour">
+    <div class="chrome">
+      <div class="chrome-nav">
+        <div class="chrome-nav-btn">‹</div>
+        <div class="chrome-nav-btn">›</div>
+      </div>
+      <div class="chrome-url">🔒 map.summittrack.com.au</div>
     </div>
-    <div class="chrome-url">🔒 map.summittrack.com.au</div>
+    <div class="slides" id="slides">
+      <!-- Caption overlay -->
+      <div class="caption-bar" id="caption-bar">
+        <div class="caption-text" id="caption-text"></div>
+        <div class="caption-sub" id="caption-sub"></div>
+      </div>
+
+      <!-- SLIDE 1: Dashboard -->
+      <div class="slide active" data-caption="Welcome to SummitMap" data-sub="Hierarchical process mapping with drill-down navigation">
+        <div class="app-frame">
+          <div class="dash-toolbar">
+            <div class="dash-logo">Summit<span>Map</span></div>
+            <div class="dash-new">+ New Map</div>
+          </div>
+          <div class="dash-hero anim-up">
+            <div>
+              <h2>Map processes that have depth</h2>
+              <p>Drill into any step to see the process inside it. Simplified view for stakeholders, BPMN 2.0 for documentation.</p>
+            </div>
+          </div>
+          <div class="dash-empty anim-up d3">Create your first map</div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Simplified View -->
+      <div class="slide" data-caption="Build process maps with cards" data-sub="Drag, connect, and label — intuitive card-based interface">
+        <div class="app-frame">
+          <div class="sim-toolbar">
+            <div class="sim-tb-logo">Summit<span>Map</span></div>
+            <div class="sim-tb-btn active">Simplified</div>
+            <div class="sim-tb-btn">BPMN 2.0</div>
+          </div>
+          <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
+            <defs><marker id="tour-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
+            <!-- Row 1: App received → Doc collection → Credit assessment → Decision -->
+            <line x1="148" y1="85" x2="175" y2="85" class="conn-arrow"/>
+            <line x1="303" y1="85" x2="330" y2="85" class="conn-arrow"/>
+            <line x1="458" y1="85" x2="485" y2="85" class="conn-arrow"/>
+            <!-- Decision down to Conditional approval -->
+            <line x1="550" y1="118" x2="550" y2="180" class="conn-arrow"/>
+            <rect x="524" y="148" width="48" height="11" rx="2" class="conn-label-bg"/>
+            <text x="548" y="156" class="conn-label">Approved</text>
+            <!-- Decision right to Decline -->
+            <line x1="615" y1="85" x2="680" y2="85" class="conn-arrow"/>
+            <rect x="634" y="69" width="42" height="11" rx="2" class="conn-label-bg"/>
+            <text x="655" y="77" class="conn-label">Declined</text>
+            <!-- Credit assessment down to Loan file -->
+            <line x1="395" y1="118" x2="395" y2="180" class="conn-arrow"/>
+          </svg>
+          <!-- Row 1 nodes -->
+          <div class="node-card nc-event anim-up d1" style="left:20px;top:55px;width:128px">
+            <div class="nc-title"><span class="nc-icon">○</span>Application received</div>
+            <div class="nc-badge">Start Event</div>
+          </div>
+          <div class="node-card nc-task anim-up d2" style="left:175px;top:55px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Document collection</div>
+            <div class="nc-desc">Gather ID & assets</div>
+            <div class="nc-badge">User Task</div>
+            <div class="drill-badge">↓</div><div class="drill-count">6</div>
+          </div>
+          <div class="node-card nc-task anim-up d3" style="left:330px;top:55px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Credit assessment</div>
+            <div class="nc-desc">Score & serviceability</div>
+            <div class="nc-badge">Service</div>
+            <div class="drill-badge">↓</div><div class="drill-count">6</div>
+          </div>
+          <div class="node-card nc-gateway anim-up d4" style="left:485px;top:55px;width:128px">
+            <div class="nc-title"><span class="nc-icon">◇</span>Decision?</div>
+            <div class="nc-badge">XOR Gateway</div>
+          </div>
+          <div class="node-card nc-task anim-up d5" style="left:680px;top:55px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Decline & notify</div>
+            <div class="nc-badge">Send</div>
+          </div>
+          <!-- Row 2 nodes -->
+          <div class="node-card nc-data anim-up d5" style="left:330px;top:180px;width:128px">
+            <div class="nc-title"><span class="nc-icon">▱</span>Loan file</div>
+            <div class="nc-desc">All documents</div>
+            <div class="nc-badge">Data Object</div>
+          </div>
+          <div class="node-card nc-task anim-up d6" style="left:485px;top:180px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Conditional approval</div>
+            <div class="nc-badge">Task</div>
+            <div class="drill-badge">↓</div><div class="drill-count">8</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Drill-down -->
+      <div class="slide" data-caption="Drill into any step" data-sub="Click a task to reveal the sub-process inside — navigate layers with breadcrumbs">
+        <div class="app-frame">
+          <div class="sim-toolbar">
+            <div class="sim-tb-logo">Summit<span>Map</span></div>
+            <div class="sim-tb-btn active">Simplified</div>
+            <div class="sim-tb-btn">BPMN 2.0</div>
+          </div>
+          <div class="breadcrumb">
+            <span class="bc-link">⌂ Mortgage Application</span>
+            <span>›</span>
+            <span style="color:#1a1916;font-weight:600">Document collection</span>
+          </div>
+          <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
+            <defs><marker id="tour-arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
+            <!-- Row 1: Start → Verify → Income → Employment → Asset -->
+            <line x1="108" y1="100" x2="148" y2="100" class="conn-arrow"/>
+            <line x1="276" y1="100" x2="316" y2="100" class="conn-arrow"/>
+            <line x1="444" y1="100" x2="484" y2="100" class="conn-arrow"/>
+            <line x1="612" y1="100" x2="652" y2="100" class="conn-arrow"/>
+            <!-- Asset & liability drops down to Documents complete -->
+            <line x1="716" y1="118" x2="716" y2="190" class="conn-arrow"/>
+          </svg>
+          <!-- Row 1 -->
+          <div class="node-card nc-event anim-up d1" style="left:20px;top:72px;width:88px">
+            <div class="nc-title"><span class="nc-icon">○</span>Start</div>
+            <div class="nc-badge">Start Event</div>
+          </div>
+          <div class="node-card nc-task anim-up d2" style="left:148px;top:68px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Verify identity</div>
+            <div class="nc-desc">100-point ID check</div>
+            <div class="nc-badge">User Task</div>
+          </div>
+          <div class="node-card nc-task anim-up d3" style="left:316px;top:68px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Income verification</div>
+            <div class="nc-desc">Payslips, tax returns</div>
+            <div class="nc-badge">User Task</div>
+          </div>
+          <div class="node-card nc-task anim-up d4" style="left:484px;top:68px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Employment check</div>
+            <div class="nc-desc">Confirm role & tenure</div>
+            <div class="nc-badge">Task</div>
+          </div>
+          <div class="node-card nc-task anim-up d5" style="left:652px;top:68px;width:128px">
+            <div class="nc-title"><span class="nc-icon">□</span>Asset & liability</div>
+            <div class="nc-desc">Bank statements</div>
+            <div class="nc-badge">User Task</div>
+          </div>
+          <!-- Row 2: End event directly below Asset & liability -->
+          <div class="node-card nc-event anim-up d6" style="left:652px;top:190px;width:128px">
+            <div class="nc-title"><span class="nc-icon">○</span>Documents complete</div>
+            <div class="nc-badge">End Event</div>
+          </div>
+          <!-- Highlight on breadcrumb -->
+          <div class="highlight" style="left:16px;top:44px;width:260px;height:16px;border-radius:4px"></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: BPMN View -->
+      <div class="slide" data-caption="Switch to BPMN 2.0 notation" data-sub="Same map, technical notation — toggle with one click">
+        <div class="app-frame">
+          <div class="sim-toolbar">
+            <div class="sim-tb-logo">Summit<span>Map</span></div>
+            <div class="sim-tb-btn">Simplified</div>
+            <div class="sim-tb-btn active">BPMN 2.0</div>
+          </div>
+          <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
+            <defs><marker id="tour-arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1a3a5c"/></marker></defs>
+
+            <!-- Start event -->
+            <circle cx="40" cy="120" r="16" fill="#e8f5f0" stroke="#2d6a4f" stroke-width="1.5"/>
+            <text x="40" y="146" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Application</text>
+            <text x="40" y="154" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">received</text>
+            <line x1="56" y1="120" x2="85" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+            <!-- Document collection -->
+            <rect x="85" y="95" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="135" y="118" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Document</text>
+            <text x="135" y="128" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">collection</text>
+            <rect x="123" y="135" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+            <text x="135" y="143" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
+            <line x1="185" y1="120" x2="215" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+            <!-- Credit assessment -->
+            <rect x="215" y="95" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="265" y="118" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Credit</text>
+            <text x="265" y="128" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">assessment</text>
+            <rect x="253" y="135" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+            <text x="265" y="143" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
+            <line x1="315" y1="120" x2="348" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+            <!-- Data object (below credit assessment) -->
+            <line x1="265" y1="145" x2="265" y2="180" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+            <path d="M248 182 h24 l8 8 v24 h-32 z" fill="#f5f3ff" stroke="#5b21b6" stroke-width="1.2"/>
+            <path d="M272 182 v8 h8" fill="none" stroke="#5b21b6" stroke-width="1"/>
+            <text x="264" y="224" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Loan file</text>
+
+            <!-- Gateway -->
+            <g transform="translate(366,120)"><polygon points="0,-18 18,0 0,18 -18,0" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/><text x="0" y="4" text-anchor="middle" font-size="12" fill="#92400e">×</text></g>
+            <text x="366" y="148" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Decision?</text>
+
+            <!-- Gateway → Decline -->
+            <line x1="384" y1="120" x2="420" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+            <rect x="390" y="105" width="36" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
+            <text x="408" y="113" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Declined</text>
+            <rect x="420" y="100" width="90" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="465" y="124" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Decline & notify</text>
+
+            <!-- Gateway → Conditional approval -->
+            <line x1="366" y1="138" x2="366" y2="180" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+            <rect x="340" y="155" width="48" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
+            <text x="364" y="163" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Approved</text>
+            <rect x="316" y="180" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="366" y="203" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Conditional</text>
+            <text x="366" y="213" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">approval</text>
+            <rect x="354" y="220" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+            <text x="366" y="228" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
+          </svg>
+          <!-- Highlight the BPMN toggle button -->
+          <div class="highlight" style="left:148px;top:14px;width:60px;height:20px;border-radius:4px"></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Features (flags, notes, export) -->
+      <div class="slide" data-caption="" data-sub="">
+        <div class="app-frame" style="background:#1a1916;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 50px">
+          <div style="font-size:22px;font-weight:700;color:white;text-align:center;margin-bottom:30px">One map. Every level of detail for every audience.</div>
+          <div style="display:flex;gap:30px;width:100%;max-width:700px">
+            <div style="flex:1;text-align:center;padding:16px">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+                <div style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:2px solid white"></div>
+              </div>
+              <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">Colour Flags</div>
+              <div style="font-size:11px;color:#9e9d96;line-height:1.5">Flag nodes for review, mark work-in-progress, highlight problem areas</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+            <div style="flex:1;text-align:center;padding:16px">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2" stroke-dasharray="3 2"/><path d="M5 7h6M5 10h4"/></svg>
+              </div>
+              <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">Draggable Notes</div>
+              <div style="font-size:11px;color:#9e9d96;line-height:1.5">Attach annotations to any step. Drag them where you need them</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+            <div style="flex:1;text-align:center;padding:16px">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2"/><circle cx="5" cy="6" r="1.5"/><path d="M1 11l4-4 3 3 2-2 5 5"/></svg>
+              </div>
+              <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">PNG Export</div>
+              <div style="font-size:11px;color:#9e9d96;line-height:1.5">Clean exports with your watermark. Ready for presentations and documents</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: CTA -->
+      <div class="slide" data-caption="" data-sub="">
+        <div class="app-frame" style="background:linear-gradient(135deg,#7a5c1f,#a67c28);display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div class="anim-up" style="font-size:28px;font-weight:700;color:white;text-align:center;line-height:1.3">
+            Map processes<br>that have depth
+          </div>
+          <div class="anim-up d2" style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:10px;text-align:center;max-width:400px;line-height:1.5">
+            Drill-down navigation · Dual BPMN/Simplified views · PNG export
+          </div>
+          <a href="https://map.summittrack.com.au" class="anim-up d4" style="margin-top:24px;background:white;color:var(--gold-dark);font-size:14px;font-weight:700;padding:10px 28px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block">
+            Try SummitMap Free →
+          </a>
+          <div class="anim-up d5" style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.5)">
+            map.summittrack.com.au
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="progress"><div class="progress-fill" id="progress"></div></div>
   </div>
-  <div class="slides" id="slides">
-    <!-- Caption overlay -->
-    <div class="caption-bar" id="caption-bar">
-      <div class="caption-text" id="caption-text"></div>
-      <div class="caption-sub" id="caption-sub"></div>
-    </div>
-
-    <!-- SLIDE 1: Dashboard -->
-    <div class="slide active" data-caption="Welcome to SummitMap" data-sub="Hierarchical process mapping with drill-down navigation">
-      <div class="app-frame">
-        <div class="dash-toolbar">
-          <div class="dash-logo">Summit<span>Map</span></div>
-          <div class="dash-new">+ New Map</div>
-        </div>
-        <div class="dash-hero anim-up">
-          <div>
-            <h2>Map processes that have depth</h2>
-            <p>Drill into any step to see the process inside it. Simplified view for stakeholders, BPMN 2.0 for documentation.</p>
-          </div>
-        </div>
-        <div class="dash-empty anim-up d3">Create your first map</div>
-      </div>
-    </div>
-
-    <!-- SLIDE 2: Simplified View -->
-    <div class="slide" data-caption="Build process maps with cards" data-sub="Drag, connect, and label — intuitive card-based interface">
-      <div class="app-frame">
-        <div class="sim-toolbar">
-          <div class="sim-tb-logo">Summit<span>Map</span></div>
-          <div class="sim-tb-btn active">Simplified</div>
-          <div class="sim-tb-btn">BPMN 2.0</div>
-        </div>
-        <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
-          <defs><marker id="tour-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
-          <!-- Row 1: App received → Doc collection → Credit assessment → Decision -->
-          <line x1="148" y1="85" x2="175" y2="85" class="conn-arrow"/>
-          <line x1="303" y1="85" x2="330" y2="85" class="conn-arrow"/>
-          <line x1="458" y1="85" x2="485" y2="85" class="conn-arrow"/>
-          <!-- Decision down to Conditional approval -->
-          <line x1="550" y1="118" x2="550" y2="180" class="conn-arrow"/>
-          <rect x="524" y="148" width="48" height="11" rx="2" class="conn-label-bg"/>
-          <text x="548" y="156" class="conn-label">Approved</text>
-          <!-- Decision right to Decline -->
-          <line x1="615" y1="85" x2="680" y2="85" class="conn-arrow"/>
-          <rect x="634" y="69" width="42" height="11" rx="2" class="conn-label-bg"/>
-          <text x="655" y="77" class="conn-label">Declined</text>
-          <!-- Credit assessment down to Loan file -->
-          <line x1="395" y1="118" x2="395" y2="180" class="conn-arrow"/>
-        </svg>
-        <!-- Row 1 nodes -->
-        <div class="node-card nc-event anim-up d1" style="left:20px;top:55px;width:128px">
-          <div class="nc-title"><span class="nc-icon">○</span>Application received</div>
-          <div class="nc-badge">Start Event</div>
-        </div>
-        <div class="node-card nc-task anim-up d2" style="left:175px;top:55px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Document collection</div>
-          <div class="nc-desc">Gather ID & assets</div>
-          <div class="nc-badge">User Task</div>
-          <div class="drill-badge">↓</div><div class="drill-count">6</div>
-        </div>
-        <div class="node-card nc-task anim-up d3" style="left:330px;top:55px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Credit assessment</div>
-          <div class="nc-desc">Score & serviceability</div>
-          <div class="nc-badge">Service</div>
-          <div class="drill-badge">↓</div><div class="drill-count">6</div>
-        </div>
-        <div class="node-card nc-gateway anim-up d4" style="left:485px;top:55px;width:128px">
-          <div class="nc-title"><span class="nc-icon">◇</span>Decision?</div>
-          <div class="nc-badge">XOR Gateway</div>
-        </div>
-        <div class="node-card nc-task anim-up d5" style="left:680px;top:55px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Decline & notify</div>
-          <div class="nc-badge">Send</div>
-        </div>
-        <!-- Row 2 nodes -->
-        <div class="node-card nc-data anim-up d5" style="left:330px;top:180px;width:128px">
-          <div class="nc-title"><span class="nc-icon">▱</span>Loan file</div>
-          <div class="nc-desc">All documents</div>
-          <div class="nc-badge">Data Object</div>
-        </div>
-        <div class="node-card nc-task anim-up d6" style="left:485px;top:180px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Conditional approval</div>
-          <div class="nc-badge">Task</div>
-          <div class="drill-badge">↓</div><div class="drill-count">8</div>
-        </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: Drill-down -->
-    <div class="slide" data-caption="Drill into any step" data-sub="Click a task to reveal the sub-process inside — navigate layers with breadcrumbs">
-      <div class="app-frame">
-        <div class="sim-toolbar">
-          <div class="sim-tb-logo">Summit<span>Map</span></div>
-          <div class="sim-tb-btn active">Simplified</div>
-          <div class="sim-tb-btn">BPMN 2.0</div>
-        </div>
-        <div class="breadcrumb">
-          <span class="bc-link">⌂ Mortgage Application</span>
-          <span>›</span>
-          <span style="color:#1a1916;font-weight:600">Document collection</span>
-        </div>
-        <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
-          <defs><marker id="tour-arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
-          <!-- Row 1: Start → Verify → Income → Employment → Asset -->
-          <line x1="108" y1="100" x2="148" y2="100" class="conn-arrow"/>
-          <line x1="276" y1="100" x2="316" y2="100" class="conn-arrow"/>
-          <line x1="444" y1="100" x2="484" y2="100" class="conn-arrow"/>
-          <line x1="612" y1="100" x2="652" y2="100" class="conn-arrow"/>
-          <!-- Asset & liability drops down to Documents complete -->
-          <line x1="716" y1="118" x2="716" y2="190" class="conn-arrow"/>
-        </svg>
-        <!-- Row 1 -->
-        <div class="node-card nc-event anim-up d1" style="left:20px;top:72px;width:88px">
-          <div class="nc-title"><span class="nc-icon">○</span>Start</div>
-          <div class="nc-badge">Start Event</div>
-        </div>
-        <div class="node-card nc-task anim-up d2" style="left:148px;top:68px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Verify identity</div>
-          <div class="nc-desc">100-point ID check</div>
-          <div class="nc-badge">User Task</div>
-        </div>
-        <div class="node-card nc-task anim-up d3" style="left:316px;top:68px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Income verification</div>
-          <div class="nc-desc">Payslips, tax returns</div>
-          <div class="nc-badge">User Task</div>
-        </div>
-        <div class="node-card nc-task anim-up d4" style="left:484px;top:68px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Employment check</div>
-          <div class="nc-desc">Confirm role & tenure</div>
-          <div class="nc-badge">Task</div>
-        </div>
-        <div class="node-card nc-task anim-up d5" style="left:652px;top:68px;width:128px">
-          <div class="nc-title"><span class="nc-icon">□</span>Asset & liability</div>
-          <div class="nc-desc">Bank statements</div>
-          <div class="nc-badge">User Task</div>
-        </div>
-        <!-- Row 2: End event directly below Asset & liability -->
-        <div class="node-card nc-event anim-up d6" style="left:652px;top:190px;width:128px">
-          <div class="nc-title"><span class="nc-icon">○</span>Documents complete</div>
-          <div class="nc-badge">End Event</div>
-        </div>
-        <!-- Highlight on breadcrumb -->
-        <div class="highlight" style="left:16px;top:44px;width:260px;height:16px;border-radius:4px"></div>
-      </div>
-    </div>
-
-    <!-- SLIDE 4: BPMN View -->
-    <div class="slide" data-caption="Switch to BPMN 2.0 notation" data-sub="Same map, technical notation — toggle with one click">
-      <div class="app-frame">
-        <div class="sim-toolbar">
-          <div class="sim-tb-logo">Summit<span>Map</span></div>
-          <div class="sim-tb-btn">Simplified</div>
-          <div class="sim-tb-btn active">BPMN 2.0</div>
-        </div>
-        <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
-          <defs><marker id="tour-arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1a3a5c"/></marker></defs>
-
-          <!-- Start event -->
-          <circle cx="40" cy="120" r="16" fill="#e8f5f0" stroke="#2d6a4f" stroke-width="1.5"/>
-          <text x="40" y="146" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Application</text>
-          <text x="40" y="154" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">received</text>
-          <line x1="56" y1="120" x2="85" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-
-          <!-- Document collection -->
-          <rect x="85" y="95" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="135" y="118" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Document</text>
-          <text x="135" y="128" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">collection</text>
-          <rect x="123" y="135" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
-          <text x="135" y="143" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
-          <line x1="185" y1="120" x2="215" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-
-          <!-- Credit assessment -->
-          <rect x="215" y="95" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="265" y="118" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Credit</text>
-          <text x="265" y="128" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">assessment</text>
-          <rect x="253" y="135" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
-          <text x="265" y="143" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
-          <line x1="315" y1="120" x2="348" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-
-          <!-- Data object (below credit assessment) -->
-          <line x1="265" y1="145" x2="265" y2="180" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-          <path d="M248 182 h24 l8 8 v24 h-32 z" fill="#f5f3ff" stroke="#5b21b6" stroke-width="1.2"/>
-          <path d="M272 182 v8 h8" fill="none" stroke="#5b21b6" stroke-width="1"/>
-          <text x="264" y="224" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Loan file</text>
-
-          <!-- Gateway -->
-          <g transform="translate(366,120)"><polygon points="0,-18 18,0 0,18 -18,0" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/><text x="0" y="4" text-anchor="middle" font-size="12" fill="#92400e">×</text></g>
-          <text x="366" y="148" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Decision?</text>
-
-          <!-- Gateway → Decline -->
-          <line x1="384" y1="120" x2="420" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-          <rect x="390" y="105" width="36" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
-          <text x="408" y="113" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Declined</text>
-          <rect x="420" y="100" width="90" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="465" y="124" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Decline & notify</text>
-
-          <!-- Gateway → Conditional approval -->
-          <line x1="366" y1="138" x2="366" y2="180" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-          <rect x="340" y="155" width="48" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
-          <text x="364" y="163" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Approved</text>
-          <rect x="316" y="180" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="366" y="203" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Conditional</text>
-          <text x="366" y="213" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">approval</text>
-          <rect x="354" y="220" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
-          <text x="366" y="228" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
-        </svg>
-        <!-- Highlight the BPMN toggle button -->
-        <div class="highlight" style="left:148px;top:14px;width:60px;height:20px;border-radius:4px"></div>
-      </div>
-    </div>
-
-    <!-- SLIDE 5: Features (flags, notes, export) -->
-    <div class="slide" data-caption="" data-sub="">
-      <div class="app-frame" style="background:#1a1916;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 50px">
-        <div style="font-size:22px;font-weight:700;color:white;text-align:center;margin-bottom:30px">One map. Every level of detail for every audience.</div>
-        <div style="display:flex;gap:30px;width:100%;max-width:700px">
-          <div style="flex:1;text-align:center;padding:16px">
-            <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
-              <div style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:2px solid white"></div>
-            </div>
-            <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">Colour Flags</div>
-            <div style="font-size:11px;color:#9e9d96;line-height:1.5">Flag nodes for review, mark work-in-progress, highlight problem areas</div>
-          </div>
-          <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
-          <div style="flex:1;text-align:center;padding:16px">
-            <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2" stroke-dasharray="3 2"/><path d="M5 7h6M5 10h4"/></svg>
-            </div>
-            <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">Draggable Notes</div>
-            <div style="font-size:11px;color:#9e9d96;line-height:1.5">Attach annotations to any step. Drag them where you need them</div>
-          </div>
-          <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
-          <div style="flex:1;text-align:center;padding:16px">
-            <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2"/><circle cx="5" cy="6" r="1.5"/><path d="M1 11l4-4 3 3 2-2 5 5"/></svg>
-            </div>
-            <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">PNG Export</div>
-            <div style="font-size:11px;color:#9e9d96;line-height:1.5">Clean exports with your watermark. Ready for presentations and documents</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 6: CTA -->
-    <div class="slide" data-caption="" data-sub="">
-      <div class="app-frame" style="background:linear-gradient(135deg,#7a5c1f,#a67c28);display:flex;flex-direction:column;align-items:center;justify-content:center">
-        <div class="anim-up" style="font-size:28px;font-weight:700;color:white;text-align:center;line-height:1.3">
-          Map processes<br>that have depth
-        </div>
-        <div class="anim-up d2" style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:10px;text-align:center;max-width:400px;line-height:1.5">
-          Drill-down navigation · Dual BPMN/Simplified views · PNG export
-        </div>
-        <a href="https://map.summittrack.com.au" class="anim-up d4" style="margin-top:24px;background:white;color:var(--gold-dark);font-size:14px;font-weight:700;padding:10px 28px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block">
-          Try SummitMap Free →
-        </a>
-        <div class="anim-up d5" style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.5)">
-          map.summittrack.com.au
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <div class="progress"><div class="progress-fill" id="progress"></div></div>
 </div>
 
 <div class="controls">
@@ -576,16 +591,19 @@ document.addEventListener('keydown', e => {
 // Show first caption
 goTo(0);
 
-// Responsive scaling for mobile
+// Responsive scaling — wrapper takes the scaled footprint so layout is honest
 function scaleTour() {
+  const wrap = document.querySelector('.tour-wrap');
   const tour = document.querySelector('.tour');
-  const maxW = window.innerWidth - 40;
+  const maxW = window.innerWidth - 20; // 10px body padding each side
   const s = Math.min(1, maxW / 900);
   tour.style.transform = `scale(${s})`;
-  tour.style.marginBottom = (506 * (s - 1)) + 'px';
+  wrap.style.width = (900 * s) + 'px';
+  wrap.style.height = (506 * s) + 'px';
 }
 scaleTour();
 window.addEventListener('resize', scaleTour);
+window.addEventListener('orientationchange', scaleTour);
 </script>
 
 </body>
