@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SummitMap — Product Tour</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#b8860b;--gold-dark:#8b6508;--navy:#1a3a5c;
+  --bg:#1a1916;--surface:#252420;--surface2:#2e2d28;
+  --text:#f5f4f0;--text2:#9e9d96;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+/* Tour container */
+.tour{position:relative;width:900px;max-width:95vw;height:506px;max-height:80vh;background:var(--surface);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06);display:flex;flex-direction:column}
+
+/* Simulated browser chrome */
+.chrome{height:36px;background:var(--surface2);display:flex;align-items:center;padding:0 14px;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.chrome-nav{display:flex;gap:4px;align-items:center}
+.chrome-nav-btn{width:20px;height:20px;border-radius:4px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:11px}
+.chrome-url{margin-left:8px;background:var(--bg);border-radius:5px;padding:5px 14px;font-size:11px;color:var(--text2);flex:1;max-width:300px;border:1px solid rgba(255,255,255,0.06)}
+
+/* Slide area */
+.slides{position:relative;flex:1;overflow:hidden;min-height:0}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.6s ease;pointer-events:none}
+.slide.active{opacity:1;pointer-events:auto}
+
+/* Simulated app screenshots as SVG illustrations */
+.app-frame{width:100%;height:100%;position:relative;background:#f5f4f0}
+
+/* Caption bar */
+.caption-bar{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(to top,rgba(26,25,22,0.95),rgba(26,25,22,0.7),transparent);
+  padding:40px 32px 20px;z-index:10;
+}
+.caption-text{
+  font-size:18px;font-weight:600;color:white;line-height:1.4;
+  text-shadow:0 2px 8px rgba(0,0,0,0.5);
+  max-width:600px;
+}
+.caption-sub{font-size:12px;color:var(--text2);margin-top:4px;font-weight:400}
+
+/* Highlight pulse */
+.highlight{
+  position:absolute;border-radius:8px;
+  box-shadow:0 0 0 3px var(--gold),0 0 20px rgba(184,134,11,0.3);
+  animation:pulse-highlight 1.5s ease-in-out infinite;
+  pointer-events:none;z-index:5;
+}
+@keyframes pulse-highlight{
+  0%,100%{box-shadow:0 0 0 3px var(--gold),0 0 20px rgba(184,134,11,0.3)}
+  50%{box-shadow:0 0 0 5px var(--gold),0 0 30px rgba(184,134,11,0.5)}
+}
+
+/* Click indicator */
+.click-ring{
+  position:absolute;width:36px;height:36px;border-radius:50%;
+  border:2px solid var(--gold);z-index:6;pointer-events:none;
+  animation:click-anim 0.8s ease-out forwards;
+}
+@keyframes click-anim{
+  0%{transform:scale(0.3);opacity:1}
+  100%{transform:scale(1.8);opacity:0}
+}
+
+/* Progress bar */
+.progress{height:3px;background:var(--surface2);position:relative}
+.progress-fill{height:100%;background:var(--gold);transition:width 0.3s ease;width:0}
+
+/* Controls */
+.controls{
+  display:flex;align-items:center;gap:16px;padding:12px 0;
+  justify-content:center;
+}
+.ctrl-btn{
+  background:none;border:1px solid rgba(255,255,255,0.15);color:var(--text2);
+  width:36px;height:36px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;font-size:14px;
+}
+.ctrl-btn:hover{border-color:var(--gold);color:var(--gold)}
+.ctrl-btn.play{background:var(--gold);border-color:var(--gold);color:white;width:42px;height:42px}
+.ctrl-btn.play:hover{background:var(--gold-dark)}
+.ctrl-dots{display:flex;gap:6px}
+.ctrl-dot{width:6px;height:6px;border-radius:50%;background:var(--surface2);transition:all 0.2s;cursor:pointer}
+.ctrl-dot.active{background:var(--gold);width:20px;border-radius:3px}
+
+/* Branding */
+.brand{text-align:center;padding:8px 0 4px;font-size:11px;color:var(--text2)}
+.brand a{color:var(--gold);text-decoration:none}
+
+/* ── Slide-specific SVG illustrations ── */
+/* These are simplified representations of the app */
+
+/* Dashboard slide */
+.dash-hero{
+  position:absolute;top:60px;left:40px;right:40px;height:100px;
+  background:linear-gradient(135deg,#7a5c1f,#a67c28);border-radius:10px;
+  display:flex;align-items:center;padding:0 24px;
+}
+.dash-hero h2{color:white;font-size:16px;font-weight:700}
+.dash-hero p{color:rgba(255,255,255,0.7);font-size:10px;margin-top:3px;max-width:300px}
+.dash-toolbar{
+  position:absolute;top:12px;left:16px;right:16px;height:32px;
+  display:flex;align-items:center;gap:8px;
+}
+.dash-logo{font-size:13px;font-weight:700;color:var(--gold-dark)}
+.dash-logo span{font-weight:400;color:#9e9d96}
+.dash-new{
+  margin-left:auto;background:var(--gold);color:white;border:none;
+  padding:4px 10px;border-radius:5px;font-size:10px;font-weight:600;
+}
+.dash-empty{
+  position:absolute;top:190px;left:0;right:0;text-align:center;
+  color:#9e9d96;font-size:11px;
+}
+
+/* Process map slides */
+.node-card{
+  position:absolute;background:white;border:1px solid #dddbd3;border-radius:8px;
+  width:160px;padding:8px 10px;box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.node-card .nc-title{font-size:10px;font-weight:600;color:#1a1916;margin-bottom:2px}
+.node-card .nc-desc{font-size:8px;color:#6b6a63;line-height:1.3}
+.node-card .nc-badge{font-size:7px;font-weight:600;padding:1px 4px;border-radius:2px;margin-top:5px;display:inline-block}
+.nc-icon{width:18px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;margin-right:5px;vertical-align:middle}
+.nc-event .nc-icon{background:#e8f5f0}
+.nc-event .nc-badge{background:#e8f5f0;color:#2d6a4f}
+.nc-task .nc-icon{background:#e8eef5}
+.nc-task .nc-badge{background:#e8eef5;color:#1a3a5c}
+.nc-gateway .nc-icon{background:#fef3c7}
+.nc-gateway .nc-badge{background:#fef3c7;color:#92400e}
+.nc-data .nc-icon{background:#ede9fe}
+.nc-data .nc-badge{background:#ede9fe;color:#5b21b6}
+.drill-badge{
+  position:absolute;bottom:6px;right:6px;width:16px;height:14px;
+  background:#1a3a5c;border-radius:3px;display:flex;align-items:center;
+  justify-content:center;font-size:6px;color:white;
+}
+.drill-count{
+  position:absolute;bottom:14px;right:-2px;width:12px;height:12px;
+  background:#1a3a5c;border-radius:50%;border:1.5px solid white;
+  font-size:6px;color:white;display:flex;align-items:center;justify-content:center;
+}
+.conn-arrow{stroke:#9e9d96;stroke-width:1.5;fill:none;marker-end:url(#tour-arrow)}
+.conn-label-bg{fill:white;stroke:#dddbd3;stroke-width:0.5}
+.conn-label{font-size:7px;fill:#6b6a63;text-anchor:middle;font-family:'DM Sans',sans-serif}
+
+/* BPMN slide */
+.bpmn-box{
+  position:absolute;background:#f0f4f8;border:1.5px solid #1a3a5c;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:600;color:#1a3a5c;text-align:center;
+  padding:4px;
+}
+.bpmn-circle{
+  position:absolute;border-radius:50%;border:1.5px solid #2d6a4f;
+  background:#e8f5f0;
+}
+.bpmn-diamond{
+  position:absolute;width:30px;height:30px;
+  transform:rotate(45deg);background:#fef3c7;border:1.5px solid #92400e;
+}
+.bpmn-sub-marker{
+  position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+  width:16px;height:10px;background:white;border:1px solid #1a3a5c;
+  border-radius:2px;display:flex;align-items:center;justify-content:center;
+  font-size:8px;color:#1a3a5c;
+}
+
+/* Sub-process (drill-down) slide */
+.breadcrumb{
+  position:absolute;top:44px;left:16px;font-size:9px;color:#6b6a63;
+  display:flex;align-items:center;gap:4px;
+}
+.breadcrumb .bc-link{color:var(--navy);cursor:pointer;text-decoration:underline}
+
+/* Toolbar */
+.sim-toolbar{
+  position:absolute;top:12px;left:12px;right:12px;height:28px;
+  display:flex;align-items:center;gap:6px;
+}
+.sim-tb-btn{
+  font-size:8px;padding:3px 8px;border-radius:4px;border:1px solid #dddbd3;
+  background:white;color:#6b6a63;display:inline-flex;align-items:center;gap:3px;
+}
+.sim-tb-btn.active{background:#1a3a5c;color:white;border-color:#1a3a5c}
+.sim-tb-btn.gold{background:var(--gold);color:white;border-color:var(--gold)}
+.sim-tb-logo{font-size:11px;font-weight:700;color:var(--gold-dark);margin-right:6px}
+.sim-tb-logo span{font-weight:400;color:#9e9d96}
+
+/* Export slide */
+.export-preview{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-2deg);
+  width:280px;background:white;border-radius:6px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.15);padding:16px;
+}
+.export-preview .ep-title{font-size:10px;font-weight:600;color:#1a1916;margin-bottom:8px;text-align:center}
+.export-wm{font-size:7px;color:rgba(0,0,0,0.3);text-align:right;margin-top:8px}
+
+/* Animated entrance */
+@keyframes slide-up{0%{transform:translateY(20px);opacity:0}100%{transform:translateY(0);opacity:1}}
+.anim-up{animation:slide-up 0.5s ease-out both}
+.d1{animation-delay:0.1s}.d2{animation-delay:0.2s}.d3{animation-delay:0.3s}
+.d4{animation-delay:0.4s}.d5{animation-delay:0.5s}.d6{animation-delay:0.6s}
+.d7{animation-delay:0.7s}.d8{animation-delay:0.8s}
+</style>
+</head>
+<body>
+
+<div class="tour">
+  <div class="chrome">
+    <div class="chrome-nav">
+      <div class="chrome-nav-btn">‹</div>
+      <div class="chrome-nav-btn">›</div>
+    </div>
+    <div class="chrome-url">🔒 map.summittrack.com.au</div>
+  </div>
+  <div class="slides" id="slides">
+
+    <!-- SLIDE 1: Dashboard -->
+    <div class="slide active" data-caption="Welcome to SummitMap" data-sub="Hierarchical process mapping with drill-down navigation">
+      <div class="app-frame">
+        <div class="dash-toolbar">
+          <div class="dash-logo">Summit<span>Map</span></div>
+          <div class="dash-new">+ New Map</div>
+        </div>
+        <div class="dash-hero anim-up">
+          <div>
+            <h2>Map processes that have depth</h2>
+            <p>Drill into any step to see the process inside it. Simplified view for stakeholders, BPMN 2.0 for documentation.</p>
+          </div>
+        </div>
+        <div class="dash-empty anim-up d3">Create your first map</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Simplified View -->
+    <div class="slide" data-caption="Build process maps with cards" data-sub="Drag, connect, and label — intuitive card-based interface">
+      <div class="app-frame">
+        <div class="sim-toolbar">
+          <div class="sim-tb-logo">Summit<span>Map</span></div>
+          <div class="sim-tb-btn active">Simplified</div>
+          <div class="sim-tb-btn">BPMN 2.0</div>
+        </div>
+        <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
+          <defs><marker id="tour-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
+          <!-- Connections -->
+          <line x1="120" y1="104" x2="120" y2="125" class="conn-arrow"/>
+          <line x1="120" y1="174" x2="120" y2="195" class="conn-arrow"/>
+          <line x1="120" y1="260" x2="120" y2="280" class="conn-arrow"/>
+          <line x1="185" y1="225" x2="265" y2="225" class="conn-arrow"/>
+          <line x1="120" y1="330" x2="120" y2="350" class="conn-arrow"/>
+          <line x1="185" y1="310" x2="265" y2="310" class="conn-arrow"/>
+          <rect x="215" y="299" width="42" height="11" rx="2" class="conn-label-bg"/>
+          <text x="236" y="307" class="conn-label">Declined</text>
+          <line x1="120" y1="362" x2="120" y2="385" class="conn-arrow"/>
+          <rect x="96" y="360" width="44" height="11" rx="2" class="conn-label-bg"/>
+          <text x="118" y="368" class="conn-label">Approved</text>
+        </svg>
+        <div class="node-card nc-event anim-up d1" style="left:40px;top:60px;width:160px">
+          <div class="nc-title"><span class="nc-icon">○</span>Application received</div>
+          <div class="nc-desc">Customer submits application</div>
+          <div class="nc-badge">Start Event</div>
+        </div>
+        <div class="node-card nc-task anim-up d2" style="left:40px;top:126px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Document collection</div>
+          <div class="nc-desc">Gather ID, income & assets</div>
+          <div class="nc-badge">User Task</div>
+          <div class="drill-badge">↓</div><div class="drill-count">6</div>
+        </div>
+        <div class="node-card nc-task anim-up d3" style="left:40px;top:196px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Credit assessment</div>
+          <div class="nc-desc">Serviceability & credit score</div>
+          <div class="nc-badge">Service</div>
+          <div class="drill-badge">↓</div><div class="drill-count">6</div>
+        </div>
+        <div class="node-card nc-data anim-up d4" style="left:268px;top:196px;width:140px">
+          <div class="nc-title"><span class="nc-icon">▱</span>Loan file</div>
+          <div class="nc-desc">All documents</div>
+          <div class="nc-badge">Data Object</div>
+        </div>
+        <div class="node-card nc-task anim-up d4" style="left:40px;top:262px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Property valuation</div>
+          <div class="nc-badge">Task</div>
+        </div>
+        <div class="node-card nc-gateway anim-up d5" style="left:40px;top:282px;width:160px">
+          <div class="nc-title"><span class="nc-icon">◇</span>Decision?</div>
+          <div class="nc-badge">XOR Gateway</div>
+        </div>
+        <div class="node-card nc-task anim-up d6" style="left:268px;top:282px;width:140px">
+          <div class="nc-title"><span class="nc-icon">□</span>Decline & notify</div>
+          <div class="nc-badge">Send</div>
+        </div>
+        <div class="node-card nc-task anim-up d6" style="left:40px;top:386px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Conditional approval</div>
+          <div class="nc-badge">Task</div>
+          <div class="drill-badge">↓</div><div class="drill-count">8</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Drill-down -->
+    <div class="slide" data-caption="Drill into any step" data-sub="Click a task to reveal the sub-process inside — navigate layers with breadcrumbs">
+      <div class="app-frame">
+        <div class="sim-toolbar">
+          <div class="sim-tb-logo">Summit<span>Map</span></div>
+          <div class="sim-tb-btn active">Simplified</div>
+          <div class="sim-tb-btn">BPMN 2.0</div>
+        </div>
+        <div class="breadcrumb">
+          <span class="bc-link">⌂ Mortgage Application</span>
+          <span>›</span>
+          <span style="color:#1a1916;font-weight:600">Document collection</span>
+        </div>
+        <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
+          <defs><marker id="tour-arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
+          <line x1="140" y1="108" x2="140" y2="130" class="conn-arrow"/>
+          <line x1="140" y1="186" x2="140" y2="206" class="conn-arrow"/>
+          <line x1="140" y1="260" x2="140" y2="280" class="conn-arrow"/>
+          <line x1="140" y1="338" x2="140" y2="358" class="conn-arrow"/>
+          <line x1="140" y1="414" x2="140" y2="434" class="conn-arrow"/>
+        </svg>
+        <div class="node-card nc-event anim-up d1" style="left:60px;top:64px;width:160px">
+          <div class="nc-title"><span class="nc-icon">○</span>Start</div>
+          <div class="nc-badge">Start Event</div>
+        </div>
+        <div class="node-card nc-task anim-up d2" style="left:60px;top:132px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Verify identity</div>
+          <div class="nc-desc">100-point ID check</div>
+          <div class="nc-badge">User Task</div>
+        </div>
+        <div class="node-card nc-task anim-up d3" style="left:60px;top:208px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Income verification</div>
+          <div class="nc-desc">Payslips, tax returns</div>
+          <div class="nc-badge">User Task</div>
+        </div>
+        <div class="node-card nc-task anim-up d4" style="left:60px;top:282px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Employment check</div>
+          <div class="nc-desc">Confirm role & tenure</div>
+          <div class="nc-badge">Task</div>
+        </div>
+        <div class="node-card nc-task anim-up d5" style="left:60px;top:360px;width:160px">
+          <div class="nc-title"><span class="nc-icon">□</span>Asset & liability statement</div>
+          <div class="nc-desc">Bank statements, debts</div>
+          <div class="nc-badge">User Task</div>
+        </div>
+        <div class="node-card nc-event anim-up d6" style="left:60px;top:436px;width:160px">
+          <div class="nc-title"><span class="nc-icon">○</span>Documents complete</div>
+          <div class="nc-badge">End Event</div>
+        </div>
+        <!-- Highlight on breadcrumb -->
+        <div class="highlight" style="left:16px;top:44px;width:260px;height:16px;border-radius:4px"></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: BPMN View -->
+    <div class="slide" data-caption="Switch to BPMN 2.0 notation" data-sub="Same map, technical notation — toggle with one click">
+      <div class="app-frame">
+        <div class="sim-toolbar">
+          <div class="sim-tb-logo">Summit<span>Map</span></div>
+          <div class="sim-tb-btn">Simplified</div>
+          <div class="sim-tb-btn active">BPMN 2.0</div>
+        </div>
+        <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
+          <defs><marker id="tour-arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1a3a5c"/></marker></defs>
+          <!-- BPMN shapes -->
+          <circle cx="100" cy="78" r="16" fill="#e8f5f0" stroke="#2d6a4f" stroke-width="1.5"/>
+          <text x="100" y="104" text-anchor="middle" font-size="8" fill="#1a1916" font-family="DM Sans">Application received</text>
+          <line x1="100" y1="94" x2="100" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+          <rect x="40" y="120" width="120" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="100" y="143" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Document</text>
+          <text x="100" y="155" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">collection</text>
+          <rect x="88" y="160" width="24" height="12" rx="2" fill="white" stroke="#1a3a5c" stroke-width="1"/>
+          <text x="100" y="170" text-anchor="middle" font-size="9" fill="#1a3a5c" font-family="monospace">+</text>
+          <line x1="100" y1="170" x2="100" y2="195" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+          <rect x="40" y="195" width="120" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="100" y="218" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Credit</text>
+          <text x="100" y="230" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">assessment</text>
+          <rect x="88" y="235" width="24" height="12" rx="2" fill="white" stroke="#1a3a5c" stroke-width="1"/>
+          <text x="100" y="245" text-anchor="middle" font-size="9" fill="#1a3a5c" font-family="monospace">+</text>
+          <line x1="160" y1="220" x2="240" y2="220" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+          <!-- Data object -->
+          <path d="M245 200 h30 l8 8 v32 h-38 z" fill="#f5f3ff" stroke="#5b21b6" stroke-width="1.2"/>
+          <path d="M275 200 v8 h8" fill="none" stroke="#5b21b6" stroke-width="1.2"/>
+          <text x="264" y="250" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Loan file</text>
+
+          <line x1="100" y1="247" x2="100" y2="275" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+          <rect x="40" y="275" width="120" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="100" y="298" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Property valuation</text>
+          <line x1="100" y1="315" x2="100" y2="340" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+
+          <!-- Gateway diamond -->
+          <g transform="translate(100,358)"><polygon points="0,-18 18,0 0,18 -18,0" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/><text x="0" y="4" text-anchor="middle" font-size="14" fill="#92400e">×</text></g>
+          <text x="100" y="385" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Decision?</text>
+
+          <line x1="118" y1="358" x2="220" y2="358" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <rect x="152" y="347" width="42" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
+          <text x="173" y="355" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Declined</text>
+
+          <rect x="220" y="338" width="100" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="270" y="361" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Decline & notify</text>
+
+          <line x1="100" y1="376" x2="100" y2="400" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <rect x="74" y="388" width="48" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
+          <text x="98" y="396" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Approved</text>
+
+          <rect x="40" y="400" width="120" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="100" y="418" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Conditional approval</text>
+          <rect x="88" y="430" width="24" height="12" rx="2" fill="white" stroke="#1a3a5c" stroke-width="1"/>
+          <text x="100" y="440" text-anchor="middle" font-size="9" fill="#1a3a5c" font-family="monospace">+</text>
+        </svg>
+        <!-- Highlight the BPMN toggle button -->
+        <div class="highlight" style="left:148px;top:14px;width:60px;height:20px;border-radius:4px"></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Features (flags, notes, export) -->
+    <div class="slide" data-caption="" data-sub="">
+      <div class="app-frame" style="background:#1a1916;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 50px">
+        <div style="font-size:22px;font-weight:700;color:white;text-align:center;margin-bottom:30px">Built for real consulting work</div>
+        <div style="display:flex;gap:30px;width:100%;max-width:700px">
+          <div style="flex:1;text-align:center;padding:16px">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+              <div style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:2px solid white"></div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">Colour Flags</div>
+            <div style="font-size:11px;color:#9e9d96;line-height:1.5">Flag nodes for review, mark work-in-progress, highlight problem areas</div>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+          <div style="flex:1;text-align:center;padding:16px">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2" stroke-dasharray="3 2"/><path d="M5 7h6M5 10h4"/></svg>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">Draggable Notes</div>
+            <div style="font-size:11px;color:#9e9d96;line-height:1.5">Attach annotations to any step. Drag them where you need them</div>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+          <div style="flex:1;text-align:center;padding:16px">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2"/><circle cx="5" cy="6" r="1.5"/><path d="M1 11l4-4 3 3 2-2 5 5"/></svg>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:white;margin-bottom:4px">PNG Export</div>
+            <div style="font-size:11px;color:#9e9d96;line-height:1.5">Clean exports with your watermark. Ready for presentations and documents</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: CTA -->
+    <div class="slide" data-caption="" data-sub="">
+      <div class="app-frame" style="background:linear-gradient(135deg,#7a5c1f,#a67c28);display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div class="anim-up" style="font-size:28px;font-weight:700;color:white;text-align:center;line-height:1.3">
+          Map processes<br>that have depth
+        </div>
+        <div class="anim-up d2" style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:10px;text-align:center;max-width:400px;line-height:1.5">
+          Drill-down navigation · Dual BPMN/Simplified views · PNG export
+        </div>
+        <div class="anim-up d4" style="margin-top:24px;background:white;color:var(--gold-dark);font-size:14px;font-weight:700;padding:10px 28px;border-radius:8px;cursor:pointer">
+          Try SummitMap Free →
+        </div>
+        <div class="anim-up d5" style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.5)">
+          map.summittrack.com.au
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="progress"><div class="progress-fill" id="progress"></div></div>
+
+  <!-- Caption overlay -->
+  <div class="caption-bar" id="caption-bar">
+    <div class="caption-text" id="caption-text"></div>
+    <div class="caption-sub" id="caption-sub"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="prevSlide()">‹</button>
+  <div class="ctrl-dots" id="dots"></div>
+  <button class="ctrl-btn play" id="play-btn" onclick="togglePlay()">▶</button>
+  <button class="ctrl-btn" onclick="nextSlide()">›</button>
+</div>
+
+<div class="brand">
+  <strong style="color:var(--gold)">Summit<span style="color:var(--text2);font-weight:400">Map</span></strong> by <a href="https://summittrack.com.au" target="_blank">Summit Track Consulting</a>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 0;
+let playing = false;
+let timer = null;
+const INTERVAL = 4500;
+
+function buildDots() {
+  const dots = document.getElementById('dots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'ctrl-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dots.appendChild(dot);
+  }
+}
+buildDots();
+
+function goTo(idx) {
+  slides[current].classList.remove('active');
+  document.querySelectorAll('.ctrl-dot')[current].classList.remove('active');
+  current = idx;
+  slides[current].classList.add('active');
+  document.querySelectorAll('.ctrl-dot')[current].classList.add('active');
+  document.getElementById('progress').style.width = ((current + 1) / totalSlides * 100) + '%';
+
+  const caption = slides[current].dataset.caption || '';
+  const sub = slides[current].dataset.sub || '';
+  const captionEl = document.getElementById('caption-text');
+  const subEl = document.getElementById('caption-sub');
+  const bar = document.getElementById('caption-bar');
+
+  if (caption) {
+    captionEl.textContent = caption;
+    subEl.textContent = sub;
+    bar.style.opacity = '1';
+  } else {
+    bar.style.opacity = '0';
+  }
+}
+
+function nextSlide() {
+  goTo((current + 1) % totalSlides);
+}
+function prevSlide() {
+  goTo((current - 1 + totalSlides) % totalSlides);
+}
+
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('play-btn').textContent = playing ? '⏸' : '▶';
+  if (playing) {
+    timer = setInterval(nextSlide, INTERVAL);
+  } else {
+    clearInterval(timer);
+  }
+}
+
+// Auto-play on load
+setTimeout(() => { togglePlay(); }, 1000);
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { prevSlide(); }
+  if (e.key === 'p') { togglePlay(); }
+});
+
+// Show first caption
+goTo(0);
+</script>
+
+</body>
+</html>
