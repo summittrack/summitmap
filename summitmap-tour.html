@@ -579,7 +579,7 @@ goTo(0);
 // Responsive scaling for mobile
 function scaleTour() {
   const tour = document.querySelector('.tour');
-  const maxW = window.innerWidth - 40;
+  const maxW = window.innerWidth;
   const s = Math.min(1, maxW / 900);
   tour.style.transform = `scale(${s})`;
   tour.style.marginBottom = (506 * (s - 1)) + 'px';
