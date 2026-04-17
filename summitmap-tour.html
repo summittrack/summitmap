@@ -21,12 +21,12 @@ body{
 
 /* Wrapper reserves the scaled footprint so layout/flexbox see the real visual size */
 .tour-wrap{
-  width:900px;height:506px;position:relative;
+  width:900px;height:506px;position:relative;overflow:hidden;
 }
 
-/* Tour container */
+/* Tour container - absolutely positioned so its layout box doesn't push the document */
 .tour{
-  position:relative;width:900px;height:506px;background:var(--surface);
+  position:absolute;top:0;left:0;width:900px;height:506px;background:var(--surface);
   border-radius:16px;overflow:hidden;
   box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06);
   display:flex;flex-direction:column;transform-origin:top left;
@@ -595,6 +595,7 @@ goTo(0);
 function scaleTour() {
   const wrap = document.querySelector('.tour-wrap');
   const tour = document.querySelector('.tour');
+  if (!wrap || !tour) return;
   const maxW = window.innerWidth - 20; // 10px body padding each side
   const s = Math.min(1, maxW / 900);
   tour.style.transform = `scale(${s})`;
@@ -602,6 +603,7 @@ function scaleTour() {
   wrap.style.height = (506 * s) + 'px';
 }
 scaleTour();
+window.addEventListener('load', scaleTour);
 window.addEventListener('resize', scaleTour);
 window.addEventListener('orientationchange', scaleTour);
 </script>
