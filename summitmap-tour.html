@@ -44,6 +44,17 @@ body{
   }
 }
 
+/* Short/landscape viewports — scale by height instead so controls stay visible */
+@media (max-height: 720px) and (max-width: 1200px) {
+  .tour-wrap {
+    width: calc((100vh - 160px) * 1.779);
+    height: calc(100vh - 160px);
+  }
+  .tour {
+    transform: scale(calc((100vh - 160px) / 506));
+  }
+}
+
 /* Simulated browser chrome */
 .chrome{height:36px;background:var(--surface2);display:flex;align-items:center;padding:0 14px;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .chrome-nav{display:flex;gap:4px;align-items:center}
@@ -603,13 +614,17 @@ document.addEventListener('keydown', e => {
 // Show first caption
 goTo(0);
 
-// Responsive scaling — wrapper takes the scaled footprint so layout is honest
+// Responsive scaling — scale to fit both width and height so nothing gets cut off
 function scaleTour() {
   const wrap = document.querySelector('.tour-wrap');
   const tour = document.querySelector('.tour');
   if (!wrap || !tour) return;
-  const maxW = window.innerWidth - 20; // 10px body padding each side
-  const s = Math.min(1, maxW / 900);
+  // Reserve ~160px for the controls, brand line, and breathing room below the tour.
+  // Adjust if you change those elements.
+  const reservedVertical = 160;
+  const maxW = window.innerWidth - 20;  // 10px body padding each side
+  const maxH = window.innerHeight - reservedVertical;
+  const s = Math.min(1, maxW / 900, maxH / 506);
   tour.style.transform = `scale(${s})`;
   wrap.style.width = (900 * s) + 'px';
   wrap.style.height = (506 * s) + 'px';
@@ -617,7 +632,13 @@ function scaleTour() {
 scaleTour();
 window.addEventListener('load', scaleTour);
 window.addEventListener('resize', scaleTour);
-window.addEventListener('orientationchange', scaleTour);
+// orientationchange fires before the viewport dimensions update on some browsers,
+// so re-run after a delay to catch the final size.
+window.addEventListener('orientationchange', () => {
+  scaleTour();
+  setTimeout(scaleTour, 100);
+  setTimeout(scaleTour, 400);
+});
 </script>
 
 </body>
