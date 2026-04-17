@@ -32,6 +32,18 @@ body{
   display:flex;flex-direction:column;transform-origin:top left;
 }
 
+/* CSS fallback scaling — works even if JS fails or is slow to run.
+   JS will override these values precisely on load; this guarantees sane defaults. */
+@media (max-width: 920px) {
+  .tour-wrap {
+    width: calc(100vw - 20px);
+    height: calc((100vw - 20px) * 0.5622);
+  }
+  .tour {
+    transform: scale(calc((100vw - 20px) / 900));
+  }
+}
+
 /* Simulated browser chrome */
 .chrome{height:36px;background:var(--surface2);display:flex;align-items:center;padding:0 14px;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .chrome-nav{display:flex;gap:4px;align-items:center}
