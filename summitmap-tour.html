@@ -35,15 +35,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 /* Caption bar */
 .caption-bar{
   position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(to top,rgba(26,25,22,0.95),rgba(26,25,22,0.7),transparent);
-  padding:40px 32px 20px;z-index:10;
+  background:linear-gradient(to top,rgba(26,25,22,0.97),rgba(26,25,22,0.85),rgba(26,25,22,0.4),transparent);
+  padding:50px 32px 16px;z-index:10;
 }
 .caption-text{
-  font-size:18px;font-weight:600;color:white;line-height:1.4;
-  text-shadow:0 2px 8px rgba(0,0,0,0.5);
-  max-width:600px;
+  font-size:24px;font-weight:700;color:white;line-height:1.3;
+  text-shadow:0 2px 12px rgba(0,0,0,0.7);
+  max-width:700px;
 }
-.caption-sub{font-size:12px;color:var(--text2);margin-top:4px;font-weight:400}
+.caption-sub{font-size:14px;color:rgba(255,255,255,0.7);margin-top:6px;font-weight:500}
 
 /* Highlight pulse */
 .highlight{
@@ -222,6 +222,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
     <div class="chrome-url">🔒 map.summittrack.com.au</div>
   </div>
   <div class="slides" id="slides">
+    <!-- Caption overlay -->
+    <div class="caption-bar" id="caption-bar">
+      <div class="caption-text" id="caption-text"></div>
+      <div class="caption-sub" id="caption-sub"></div>
+    </div>
 
     <!-- SLIDE 1: Dashboard -->
     <div class="slide active" data-caption="Welcome to SummitMap" data-sub="Hierarchical process mapping with drill-down navigation">
@@ -250,57 +255,57 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
         </div>
         <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
           <defs><marker id="tour-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
-          <!-- Connections -->
-          <line x1="120" y1="104" x2="120" y2="125" class="conn-arrow"/>
-          <line x1="120" y1="174" x2="120" y2="195" class="conn-arrow"/>
-          <line x1="120" y1="260" x2="120" y2="280" class="conn-arrow"/>
-          <line x1="185" y1="225" x2="265" y2="225" class="conn-arrow"/>
-          <line x1="120" y1="330" x2="120" y2="350" class="conn-arrow"/>
-          <line x1="185" y1="310" x2="265" y2="310" class="conn-arrow"/>
-          <rect x="215" y="299" width="42" height="11" rx="2" class="conn-label-bg"/>
-          <text x="236" y="307" class="conn-label">Declined</text>
-          <line x1="120" y1="362" x2="120" y2="385" class="conn-arrow"/>
-          <rect x="96" y="360" width="44" height="11" rx="2" class="conn-label-bg"/>
-          <text x="118" y="368" class="conn-label">Approved</text>
+          <!-- Row 1: App received → Doc collection → Credit assessment → Decision -->
+          <line x1="148" y1="85" x2="175" y2="85" class="conn-arrow"/>
+          <line x1="303" y1="85" x2="330" y2="85" class="conn-arrow"/>
+          <line x1="458" y1="85" x2="485" y2="85" class="conn-arrow"/>
+          <!-- Decision down to Conditional approval -->
+          <line x1="550" y1="118" x2="550" y2="180" class="conn-arrow"/>
+          <rect x="524" y="148" width="48" height="11" rx="2" class="conn-label-bg"/>
+          <text x="548" y="156" class="conn-label">Approved</text>
+          <!-- Decision right to Decline -->
+          <line x1="615" y1="85" x2="680" y2="85" class="conn-arrow"/>
+          <rect x="634" y="69" width="42" height="11" rx="2" class="conn-label-bg"/>
+          <text x="655" y="77" class="conn-label">Declined</text>
+          <!-- Credit assessment down to Loan file -->
+          <line x1="395" y1="118" x2="395" y2="180" class="conn-arrow"/>
         </svg>
-        <div class="node-card nc-event anim-up d1" style="left:40px;top:60px;width:160px">
+        <!-- Row 1 nodes -->
+        <div class="node-card nc-event anim-up d1" style="left:20px;top:55px;width:128px">
           <div class="nc-title"><span class="nc-icon">○</span>Application received</div>
-          <div class="nc-desc">Customer submits application</div>
           <div class="nc-badge">Start Event</div>
         </div>
-        <div class="node-card nc-task anim-up d2" style="left:40px;top:126px;width:160px">
+        <div class="node-card nc-task anim-up d2" style="left:175px;top:55px;width:128px">
           <div class="nc-title"><span class="nc-icon">□</span>Document collection</div>
-          <div class="nc-desc">Gather ID, income & assets</div>
+          <div class="nc-desc">Gather ID & assets</div>
           <div class="nc-badge">User Task</div>
           <div class="drill-badge">↓</div><div class="drill-count">6</div>
         </div>
-        <div class="node-card nc-task anim-up d3" style="left:40px;top:196px;width:160px">
+        <div class="node-card nc-task anim-up d3" style="left:330px;top:55px;width:128px">
           <div class="nc-title"><span class="nc-icon">□</span>Credit assessment</div>
-          <div class="nc-desc">Serviceability & credit score</div>
+          <div class="nc-desc">Score & serviceability</div>
           <div class="nc-badge">Service</div>
           <div class="drill-badge">↓</div><div class="drill-count">6</div>
         </div>
-        <div class="node-card nc-data anim-up d4" style="left:268px;top:196px;width:140px">
+        <div class="node-card nc-gateway anim-up d4" style="left:485px;top:55px;width:128px">
+          <div class="nc-title"><span class="nc-icon">◇</span>Decision?</div>
+          <div class="nc-badge">XOR Gateway</div>
+        </div>
+        <div class="node-card nc-task anim-up d5" style="left:680px;top:55px;width:128px">
+          <div class="nc-title"><span class="nc-icon">□</span>Decline & notify</div>
+          <div class="nc-badge">Send</div>
+        </div>
+        <!-- Row 2 nodes -->
+        <div class="node-card nc-data anim-up d5" style="left:330px;top:180px;width:128px">
           <div class="nc-title"><span class="nc-icon">▱</span>Loan file</div>
           <div class="nc-desc">All documents</div>
           <div class="nc-badge">Data Object</div>
         </div>
-        <div class="node-card nc-task anim-up d4" style="left:40px;top:262px;width:160px">
-          <div class="nc-title"><span class="nc-icon">□</span>Property valuation</div>
-          <div class="nc-badge">Task</div>
-        </div>
-        <div class="node-card nc-gateway anim-up d5" style="left:40px;top:282px;width:160px">
-          <div class="nc-title"><span class="nc-icon">◇</span>Decision?</div>
-          <div class="nc-badge">XOR Gateway</div>
-        </div>
-        <div class="node-card nc-task anim-up d6" style="left:268px;top:282px;width:140px">
-          <div class="nc-title"><span class="nc-icon">□</span>Decline & notify</div>
-          <div class="nc-badge">Send</div>
-        </div>
-        <div class="node-card nc-task anim-up d6" style="left:40px;top:386px;width:160px">
+        <div class="node-card nc-task anim-up d6" style="left:485px;top:180px;width:128px">
           <div class="nc-title"><span class="nc-icon">□</span>Conditional approval</div>
           <div class="nc-badge">Task</div>
           <div class="drill-badge">↓</div><div class="drill-count">8</div>
+        </div>
         </div>
       </div>
     </div>
@@ -320,37 +325,41 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
         </div>
         <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
           <defs><marker id="tour-arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9e9d96"/></marker></defs>
-          <line x1="140" y1="108" x2="140" y2="130" class="conn-arrow"/>
-          <line x1="140" y1="186" x2="140" y2="206" class="conn-arrow"/>
-          <line x1="140" y1="260" x2="140" y2="280" class="conn-arrow"/>
-          <line x1="140" y1="338" x2="140" y2="358" class="conn-arrow"/>
-          <line x1="140" y1="414" x2="140" y2="434" class="conn-arrow"/>
+          <!-- Row 1: Start → Verify → Income → Employment → Asset -->
+          <line x1="108" y1="100" x2="148" y2="100" class="conn-arrow"/>
+          <line x1="276" y1="100" x2="316" y2="100" class="conn-arrow"/>
+          <line x1="444" y1="100" x2="484" y2="100" class="conn-arrow"/>
+          <line x1="612" y1="100" x2="652" y2="100" class="conn-arrow"/>
+          <!-- Asset & liability drops down to Documents complete -->
+          <line x1="716" y1="118" x2="716" y2="190" class="conn-arrow"/>
         </svg>
-        <div class="node-card nc-event anim-up d1" style="left:60px;top:64px;width:160px">
+        <!-- Row 1 -->
+        <div class="node-card nc-event anim-up d1" style="left:20px;top:72px;width:88px">
           <div class="nc-title"><span class="nc-icon">○</span>Start</div>
           <div class="nc-badge">Start Event</div>
         </div>
-        <div class="node-card nc-task anim-up d2" style="left:60px;top:132px;width:160px">
+        <div class="node-card nc-task anim-up d2" style="left:148px;top:68px;width:128px">
           <div class="nc-title"><span class="nc-icon">□</span>Verify identity</div>
           <div class="nc-desc">100-point ID check</div>
           <div class="nc-badge">User Task</div>
         </div>
-        <div class="node-card nc-task anim-up d3" style="left:60px;top:208px;width:160px">
+        <div class="node-card nc-task anim-up d3" style="left:316px;top:68px;width:128px">
           <div class="nc-title"><span class="nc-icon">□</span>Income verification</div>
           <div class="nc-desc">Payslips, tax returns</div>
           <div class="nc-badge">User Task</div>
         </div>
-        <div class="node-card nc-task anim-up d4" style="left:60px;top:282px;width:160px">
+        <div class="node-card nc-task anim-up d4" style="left:484px;top:68px;width:128px">
           <div class="nc-title"><span class="nc-icon">□</span>Employment check</div>
           <div class="nc-desc">Confirm role & tenure</div>
           <div class="nc-badge">Task</div>
         </div>
-        <div class="node-card nc-task anim-up d5" style="left:60px;top:360px;width:160px">
-          <div class="nc-title"><span class="nc-icon">□</span>Asset & liability statement</div>
-          <div class="nc-desc">Bank statements, debts</div>
+        <div class="node-card nc-task anim-up d5" style="left:652px;top:68px;width:128px">
+          <div class="nc-title"><span class="nc-icon">□</span>Asset & liability</div>
+          <div class="nc-desc">Bank statements</div>
           <div class="nc-badge">User Task</div>
         </div>
-        <div class="node-card nc-event anim-up d6" style="left:60px;top:436px;width:160px">
+        <!-- Row 2: End event directly below Asset & liability -->
+        <div class="node-card nc-event anim-up d6" style="left:652px;top:190px;width:128px">
           <div class="nc-title"><span class="nc-icon">○</span>Documents complete</div>
           <div class="nc-badge">End Event</div>
         </div>
@@ -369,55 +378,55 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
         </div>
         <svg style="position:absolute;top:0;left:0;width:100%;height:100%" overflow="visible">
           <defs><marker id="tour-arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1a3a5c"/></marker></defs>
-          <!-- BPMN shapes -->
-          <circle cx="100" cy="78" r="16" fill="#e8f5f0" stroke="#2d6a4f" stroke-width="1.5"/>
-          <text x="100" y="104" text-anchor="middle" font-size="8" fill="#1a1916" font-family="DM Sans">Application received</text>
-          <line x1="100" y1="94" x2="100" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
 
-          <rect x="40" y="120" width="120" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="100" y="143" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Document</text>
-          <text x="100" y="155" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">collection</text>
-          <rect x="88" y="160" width="24" height="12" rx="2" fill="white" stroke="#1a3a5c" stroke-width="1"/>
-          <text x="100" y="170" text-anchor="middle" font-size="9" fill="#1a3a5c" font-family="monospace">+</text>
-          <line x1="100" y1="170" x2="100" y2="195" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <!-- Start event -->
+          <circle cx="40" cy="120" r="16" fill="#e8f5f0" stroke="#2d6a4f" stroke-width="1.5"/>
+          <text x="40" y="146" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Application</text>
+          <text x="40" y="154" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">received</text>
+          <line x1="56" y1="120" x2="85" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
 
-          <rect x="40" y="195" width="120" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="100" y="218" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Credit</text>
-          <text x="100" y="230" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">assessment</text>
-          <rect x="88" y="235" width="24" height="12" rx="2" fill="white" stroke="#1a3a5c" stroke-width="1"/>
-          <text x="100" y="245" text-anchor="middle" font-size="9" fill="#1a3a5c" font-family="monospace">+</text>
-          <line x1="160" y1="220" x2="240" y2="220" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <!-- Document collection -->
+          <rect x="85" y="95" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="135" y="118" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Document</text>
+          <text x="135" y="128" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">collection</text>
+          <rect x="123" y="135" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+          <text x="135" y="143" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
+          <line x1="185" y1="120" x2="215" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
 
-          <!-- Data object -->
-          <path d="M245 200 h30 l8 8 v32 h-38 z" fill="#f5f3ff" stroke="#5b21b6" stroke-width="1.2"/>
-          <path d="M275 200 v8 h8" fill="none" stroke="#5b21b6" stroke-width="1.2"/>
-          <text x="264" y="250" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Loan file</text>
+          <!-- Credit assessment -->
+          <rect x="215" y="95" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="265" y="118" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Credit</text>
+          <text x="265" y="128" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">assessment</text>
+          <rect x="253" y="135" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+          <text x="265" y="143" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
+          <line x1="315" y1="120" x2="348" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
 
-          <line x1="100" y1="247" x2="100" y2="275" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <!-- Data object (below credit assessment) -->
+          <line x1="265" y1="145" x2="265" y2="180" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <path d="M248 182 h24 l8 8 v24 h-32 z" fill="#f5f3ff" stroke="#5b21b6" stroke-width="1.2"/>
+          <path d="M272 182 v8 h8" fill="none" stroke="#5b21b6" stroke-width="1"/>
+          <text x="264" y="224" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Loan file</text>
 
-          <rect x="40" y="275" width="120" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="100" y="298" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Property valuation</text>
-          <line x1="100" y1="315" x2="100" y2="340" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <!-- Gateway -->
+          <g transform="translate(366,120)"><polygon points="0,-18 18,0 0,18 -18,0" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/><text x="0" y="4" text-anchor="middle" font-size="12" fill="#92400e">×</text></g>
+          <text x="366" y="148" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Decision?</text>
 
-          <!-- Gateway diamond -->
-          <g transform="translate(100,358)"><polygon points="0,-18 18,0 0,18 -18,0" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/><text x="0" y="4" text-anchor="middle" font-size="14" fill="#92400e">×</text></g>
-          <text x="100" y="385" text-anchor="middle" font-size="7" fill="#1a1916" font-family="DM Sans">Decision?</text>
+          <!-- Gateway → Decline -->
+          <line x1="384" y1="120" x2="420" y2="120" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <rect x="390" y="105" width="36" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
+          <text x="408" y="113" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Declined</text>
+          <rect x="420" y="100" width="90" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="465" y="124" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Decline & notify</text>
 
-          <line x1="118" y1="358" x2="220" y2="358" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-          <rect x="152" y="347" width="42" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
-          <text x="173" y="355" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Declined</text>
-
-          <rect x="220" y="338" width="100" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="270" y="361" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Decline & notify</text>
-
-          <line x1="100" y1="376" x2="100" y2="400" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
-          <rect x="74" y="388" width="48" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
-          <text x="98" y="396" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Approved</text>
-
-          <rect x="40" y="400" width="120" height="40" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
-          <text x="100" y="418" text-anchor="middle" font-size="9" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Conditional approval</text>
-          <rect x="88" y="430" width="24" height="12" rx="2" fill="white" stroke="#1a3a5c" stroke-width="1"/>
-          <text x="100" y="440" text-anchor="middle" font-size="9" fill="#1a3a5c" font-family="monospace">+</text>
+          <!-- Gateway → Conditional approval -->
+          <line x1="366" y1="138" x2="366" y2="180" stroke="#1a3a5c" stroke-width="1.5" marker-end="url(#tour-arrow3)"/>
+          <rect x="340" y="155" width="48" height="11" rx="2" fill="white" stroke="#dddbd3" stroke-width="0.5"/>
+          <text x="364" y="163" font-size="7" fill="#6b6a63" text-anchor="middle" font-family="DM Sans">Approved</text>
+          <rect x="316" y="180" width="100" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="366" y="203" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">Conditional</text>
+          <text x="366" y="213" text-anchor="middle" font-size="8" font-weight="600" fill="#1a3a5c" font-family="DM Sans">approval</text>
+          <rect x="354" y="220" width="24" height="10" rx="2" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+          <text x="366" y="228" text-anchor="middle" font-size="8" fill="#1a3a5c" font-family="monospace">+</text>
         </svg>
         <!-- Highlight the BPMN toggle button -->
         <div class="highlight" style="left:148px;top:14px;width:60px;height:20px;border-radius:4px"></div>
@@ -427,7 +436,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
     <!-- SLIDE 5: Features (flags, notes, export) -->
     <div class="slide" data-caption="" data-sub="">
       <div class="app-frame" style="background:#1a1916;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 50px">
-        <div style="font-size:22px;font-weight:700;color:white;text-align:center;margin-bottom:30px">Built for real consulting work</div>
+        <div style="font-size:22px;font-weight:700;color:white;text-align:center;margin-bottom:30px">One map. Every level of detail for every audience.</div>
         <div style="display:flex;gap:30px;width:100%;max-width:700px">
           <div style="flex:1;text-align:center;padding:16px">
             <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,134,11,0.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
@@ -465,9 +474,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
         <div class="anim-up d2" style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:10px;text-align:center;max-width:400px;line-height:1.5">
           Drill-down navigation · Dual BPMN/Simplified views · PNG export
         </div>
-        <div class="anim-up d4" style="margin-top:24px;background:white;color:var(--gold-dark);font-size:14px;font-weight:700;padding:10px 28px;border-radius:8px;cursor:pointer">
+        <a href="https://map.summittrack.com.au" class="anim-up d4" style="margin-top:24px;background:white;color:var(--gold-dark);font-size:14px;font-weight:700;padding:10px 28px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block">
           Try SummitMap Free →
-        </div>
+        </a>
         <div class="anim-up d5" style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.5)">
           map.summittrack.com.au
         </div>
@@ -476,12 +485,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 
   </div>
   <div class="progress"><div class="progress-fill" id="progress"></div></div>
-
-  <!-- Caption overlay -->
-  <div class="caption-bar" id="caption-bar">
-    <div class="caption-text" id="caption-text"></div>
-    <div class="caption-sub" id="caption-sub"></div>
-  </div>
 </div>
 
 <div class="controls">
@@ -534,6 +537,12 @@ function goTo(idx) {
     bar.style.opacity = '1';
   } else {
     bar.style.opacity = '0';
+  }
+
+  // Reset timer so each slide gets the full duration
+  if (playing) {
+    clearInterval(timer);
+    timer = setInterval(nextSlide, INTERVAL);
   }
 }
 
